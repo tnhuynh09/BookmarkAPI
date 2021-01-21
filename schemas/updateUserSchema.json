@@ -1,0 +1,101 @@
+{
+    "default": {},
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "additionalProperties": false,
+    "examples": [
+        {
+            "username": "teewins",
+            "password": "Hweuss123",
+            "first_name": "Emma",
+            "last_name": "Williams",
+            "email": "emmmms@gmail.com",
+            "image_url": "https://tinyurl.com/yyrfbmm6"
+        }
+    ],
+    "properties": {
+        "username": {
+            "$id": "/properties/username",
+            "type": "string",
+            "title": "The Username Schema ",
+            "default": "",
+            "minLength": 1,
+            "maxLength": 55,
+            "examples": [
+                "teewins"
+            ]
+        },
+        "first_name": {
+            "$id": "/properties/first_name",
+            "type": "string",
+            "title": "The First_name Schema ",
+            "default": "",
+            "minLength": 1,
+            "maxLength": 55,
+            "examples": [
+                "Emma"
+            ]
+        },
+        "last_name": {
+            "$id": "/properties/last_name",
+            "type": "string",
+            "title": "The Last_name Schema ",
+            "default": "",
+            "minLength": 1,
+            "maxLength": 55,
+            "examples": [
+                "Williams"
+            ]
+        },
+        "email": {
+            "$id": "/properties/email",
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 60,
+            "title": "The Email Schema ",
+            "default": "",
+            "examples": [
+                "emmmms@gmail.com"
+            ]
+        },
+        "password": {
+            "$id": "/properties/password",
+            "type": "string",
+            "title": "The Password Schema ",
+            "default": "",
+            "minLength": 5,
+            "maxLength": 55,
+            "examples": [
+                "Hweuss123"
+            ]
+        },
+        "image_url": {
+            "$id": "/properties/photo",
+            "type": "string",
+            "title": "The Photo Schema ",
+            "format": "uri",
+            "default": "",
+            "examples": [
+                "https://tinyurl.com/yyrfbmm6"
+            ]
+        },
+        "is_admin": {
+            "$id": "/properties/admin",
+            "type": "boolean",
+            "title": "The Admin Schema ",
+            "default": "false",
+            "examples": [
+                "true"
+            ]
+        },
+        "_token": {
+            "$id": "/properties/token",
+            "type": "string",
+            "title": "The Token Schema ",
+            "default": "",
+            "examples": [
+                "foo123"
+            ]
+        }
+    }
+}
