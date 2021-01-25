@@ -26,10 +26,10 @@ class User {
             RETURNING username, first_name, last_name, email, password, image_url, is_admin`,
             [
                 data.username,
-                hashedPassword,
                 data.first_name,
                 data.last_name,
                 data.email,
+                hashedPassword,
                 data.image_url,
                 data.is_admin
             ]
@@ -77,17 +77,17 @@ class User {
             throw new ExpressError(`No such user: ${username}`, 404);
         }
 
-        const applicationsRes = await db.query(
-            `SELECT j.title, 
-                    j.company_handle, 
-                    a.state 
-             FROM applications AS a
-             JOIN jobs AS j ON j.id = a.job_id
-             WHERE a.username = $1`,
-            [username]
-        );
+        // const applicationsRes = await db.query(
+        //     `SELECT j.title, 
+        //             j.company_handle, 
+        //             a.state 
+        //      FROM applications AS a
+        //      JOIN jobs AS j ON j.id = a.job_id
+        //      WHERE a.username = $1`,
+        //     [username]
+        // );
 
-        user.jobs = applicationsRes.rows;
+        // user.jobs = applicationsRes.rows;
         return user;
     }
 
@@ -152,6 +152,7 @@ class User {
             [data.username]
         );
 
+        console.log("AUTH - user authenticate result", result.rows);
         const user = result.rows[0];
         if (user) {
             // compare hashed password to a new hash from password
@@ -160,8 +161,9 @@ class User {
                 return user;
             }
         }
-
-        throw ExpressError("Invalid password. Please try again.", 401);
+        // if (result.rows.length === 0) {
+        throw new ExpressError("Invalid password. Please try again.", 401);
+        // }
     }
 }
 

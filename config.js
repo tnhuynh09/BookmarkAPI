@@ -4,7 +4,9 @@ require("dotenv").config();
 
 const SECRET = process.env.SECRET_KEY || "test";
 
-const PORT = +process.env.PORT || 3000;
+const API_KEY = process.env.BOOKMARK_GOOGLE_API_KEY;
+
+const PORT = +process.env.PORT || 3001;
 
 // database is:
 //
@@ -28,6 +30,7 @@ const BCRYPT_WORK_FACTOR = 12;
 
 module.exports = {
     SECRET,
+    API_KEY,
     PORT,
     DB_URI,
     BCRYPT_WORK_FACTOR

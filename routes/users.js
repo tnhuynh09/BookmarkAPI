@@ -43,9 +43,11 @@ router.post('/', async function (req, res, next) {
 // Return all the fields for a user excluding the password.
 router.get('/:username', authenticationRequired, async function (req, res, next) {
     try {
+        console.log("API - GET USER");
         const user = await User.findOne(req.params.username);
         return res.json({ user });
     } catch (err) {
+        console.log("API - GET USER --- err", err);
         return next(err);
     }
 });

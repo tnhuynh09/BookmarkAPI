@@ -3,27 +3,11 @@
 
 -- psql bookmark < data.sql
 
--- DROP TABLE IF EXISTS applications;
--- DROP TABLE IF EXISTS jobs;
--- DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS users_books;
+DROP TABLE IF EXISTS journals;
+DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS users;
-
--- CREATE TABLE companies(
---     handle TEXT PRIMARY KEY,
---     name TEXT UNIQUE NOT NULL,
---     num_employees INTEGER,
---     description TEXT,
---     logo_url TEXT
--- );
-
--- CREATE TABLE jobs(
---     id SERIAL PRIMARY KEY,
---     title TEXT NOT NULL,
---     salary FLOAT NOT NULL,
---     equity FLOAT CHECK(equity <= 1.0),
---     company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
--- 	date_posted TIMESTAMP DEFAULT current_timestamp
--- );
+DROP TYPE IF EXISTS progress;
 
 CREATE TABLE users(
     username TEXT PRIMARY KEY,
@@ -32,34 +16,66 @@ CREATE TABLE users(
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     image_url TEXT,
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+    is_admin BOOLEAN DEFAULT FALSE
 );
+
+CREATE TABLE books(
+    id SERIAL PRIMARY KEY,
+    google_book_id TEXT UNIQUE NOT NULL,
+    book_image TEXT,
+    title TEXT,
+    authors TEXT,
+    description TEXT,
+    average_rating FLOAT,
+    published_date TEXT,
+    publisher TEXT,
+    page_count INTEGER,
+    isbn TEXT
+);
+
+CREATE TABLE users_books(
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+    book_id INTEGER NOT NULL REFERENCES books ON DELETE CASCADE
+);
+
+CREATE TYPE progress AS ENUM ('reading', 'finished', 'will read', 'abandoned');
+CREATE TABLE journals(
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+    book_id INTEGER NOT NULL REFERENCES books ON DELETE CASCADE,
+    is_public BOOLEAN DEFAULT TRUE,
+    date_started DATE,
+    date_finished DATE,
+    reading_status progress,
+    my_rating FLOAT,
+    book_review TEXT, 
+    favorite_quote TEXT,
+    final_thought TEXT
+);
+
+
+
+
+
+-- CREATE TABLE jobs(
+--     id SERIAL PRIMARY KEY,
+--     title TEXT NOT NULL,
+--     salary FLOAT NOT NULL,
+--     equity FLOAT CHECK(equity <= 1.0),
+--     company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
+	-- date_posted TIMESTAMP DEFAULT current_timestamp
+-- );
 
 -- CREATE TYPE progress AS ENUM ('interested', 'applied', 'accepted', 'rejected');
 -- CREATE TABLE applications(
 --     username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
 --     job_id INTEGER NOT NULL REFERENCES jobs ON DELETE CASCADE,
---     -- state TEXT,
+--     state TEXT,
 -- 	state progress,
 --     created_at TIMESTAMP DEFAULT current_timestamp,
 --     PRIMARY KEY(username, job_id)
 -- );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 -- INSERT INTO companies

@@ -2,17 +2,15 @@ const express = require("express");
 const ExpressError = require("./helpers/expressError");
 const app = express();
 const cors = require("cors");
-// const companiesRoutes = require('./routes/companies');
-// const jobsRoutes = require('./routes/jobs');
+const booksRoutes = require('./routes/books');
 const usersRoutes = require('./routes/users');
-// const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 
 app.use(express.json());
 app.use(cors());
-// app.use('/companies', companiesRoutes);
-// app.use('/jobs', jobsRoutes);
+app.use('/books', booksRoutes);
 app.use('/users', usersRoutes);
-// app.use('/auth', authRoutes);
+app.use('/', authRoutes);
 
 
 /** 404 handler */
