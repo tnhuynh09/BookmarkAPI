@@ -12,18 +12,21 @@ const { authenticationRequired, correctUserRequired } = require('../middleware/a
 const router = express.Router();
 
 // Return the username, first_name, last_name and email of the user objects.
-router.get('/', authenticationRequired, async function (req, res, next) {
-    try {
-        const users = await User.findAll();
-        return res.json({ users });
-    } catch (err) {
-        return next(err);
-    }
-});
+// router.get('/', authenticationRequired, async function (req, res, next) {
+//     try {
+//         const users = await User.findAll();
+//         return res.json({ users });
+//     } catch (err) {
+//         return next(err);
+//     }
+// });
 
 // Create a new user and return information on the newly created user.
 router.post('/', async function (req, res, next) {
     try {
+        if (!req.body.image_url) {
+            req.body.image_url = "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png";
+        }
         const result = jsonschema.validate(req.body, newUserSchema);
         if (!result.valid) {
             const listOfErrors = result.errors.map(error => error.stack);
@@ -41,11 +44,10 @@ router.post('/', async function (req, res, next) {
 });
 
 // Return all the fields for a user excluding the password.
-router.get('/:username', authenticationRequired, async function (req, res, next) {
+router.get('/', authenticationRequired, async function (req, res, next) {
     try {
-        console.log("API - GET USER");
-        const user = await User.findOne(req.params.username);
-        return res.json({ user });
+        const user = await User.findOne(req.user.username);
+        return res.json({ user: user });
     } catch (err) {
         console.log("API - GET USER --- err", err);
         return next(err);

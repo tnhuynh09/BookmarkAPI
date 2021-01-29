@@ -28,20 +28,44 @@ router.get('/', async function (req, res, next) {
         console.log("BOOK MODEL - findAll() - books", books.data.items);
 
         let result = [];
-        for (let i = 0; i < books.data.items.length; i++) {
-            const currentItem = books.data.items[i];
-            result.push({
-                googleBookId: currentItem.id,
-                bookImage: currentItem.volumeInfo.imageLinks.thumbnail,
-                title: currentItem.volumeInfo.title,
-                authors: currentItem.volumeInfo.authors,
-                description: currentItem.volumeInfo.description,
-                averageRating: currentItem.volumeInfo.averageRating,
-                publishedDate: currentItem.volumeInfo.publishedDate,
-                publisher: currentItem.volumeInfo.publisher,
-                pageCount: currentItem.volumeInfo.pageCount,
-                isbn: currentItem.volumeInfo.industryIdentifiers[0].identifier
-            });
+        if (books.data.items) {
+            for (let i = 0; i < books.data.items.length; i++) {
+                const currentItem = books.data.items[i];
+                let bookImage = "";
+                let title = "";
+                let isbn = "";
+                try {
+                    bookImage = currentItem.volumeInfo.imageLinks.thumbnail;
+                    title = currentItem.volumeInfo.title;
+                    isbn = currentItem.volumeInfo.industryIdentifiers[0].identifier;
+                } catch (error) {
+
+                }
+
+                let authors = "";
+                if (currentItem.volumeInfo.authors && currentItem.volumeInfo.authors.length > 0) {
+                    for (let i = 0; i < currentItem.volumeInfo.authors.length; i++) {
+                        if (i == 0) {
+                            authors += currentItem.volumeInfo.authors[i];
+                        } else {
+                            authors += ", " + currentItem.volumeInfo.authors[i];
+                        }
+                    }
+                }
+
+                result.push({
+                    googleBookId: currentItem.id,
+                    bookImage: bookImage,
+                    title: title,
+                    authors: authors,
+                    description: currentItem.volumeInfo.description,
+                    averageRating: currentItem.volumeInfo.averageRating,
+                    publishedDate: currentItem.volumeInfo.publishedDate,
+                    publisher: currentItem.volumeInfo.publisher,
+                    pageCount: currentItem.volumeInfo.pageCount,
+                    isbn: isbn
+                });
+            }
         }
 
         return res.json({ books: result });
@@ -69,11 +93,46 @@ router.post('/add', authenticationRequired, async function (req, res, next) {
             book = await Book.addOne(req.body);
         }
 
-        console.log("BOOK - POST ROUTE - book", book);
-
         await Book.addOneToBookshelf(req.user.username, book);
 
+        console.log("BOOK - POST ROUTE - book", book);
+
         return res.json({ success: true });
+        // return ({ book });
+
+    } catch (err) {
+        return next(err);
+    }
+});
+
+// Get request for all the books on the bookshelf
+// Books the user added to their account
+router.get('/bookshelf', authenticationRequired, async function (req, res, next) {
+    console.log("BOOK ROUTE - get bookshelf");
+
+    try {
+        console.log("BOOK - ROUTES");
+        let users_books = await Book.getBookshelf(req.user.username);
+        console.log("BOOK ROUTES - users_books", users_books);
+
+        return res.json({ users_books });
+
+    } catch (err) {
+        return next(err);
+    }
+});
+
+// Post request to delete a book from bookshelf
+router.post('/delete', authenticationRequired, async function (req, res, next) {
+    console.log("BOOK ROUTE - delete a book from bookshelf");
+    console.log("DELETE - BOOK ROUTE - res - usersBooksId", req.body.usersBooksId);
+
+    try {
+        console.log("BOOK - ROUTES");
+        let isDeleteBookSuccess = await Book.deleteBook(req.body.usersBooksId);
+        console.log("BOOK ROUTES - isDeleteBookSuccess", isDeleteBookSuccess);
+
+        return res.json({ success: isDeleteBookSuccess });
 
     } catch (err) {
         return next(err);

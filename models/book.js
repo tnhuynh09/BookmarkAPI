@@ -7,13 +7,6 @@ const { BCRYPT_WORK_FACTOR } = require("../config");
 
 class Book {
     static async findOne(book) {
-        // const result = await db.query(
-        //     `SELECT google_book_id
-        //     FROM books 
-        //     WHERE google_book_id = $1`,
-        //     [book.googleBookId]
-        // );
-
         const result = await db.query(
             `SELECT id, google_book_id, book_image, title, authors, description, average_rating, published_date, publisher, page_count, isbn
             FROM books 
@@ -67,6 +60,45 @@ class Book {
         console.log("MODELS - BOOK - ADD ONE - bookRes", bookRes);
 
         return bookRes;
+    }
+
+    static async getBookshelf(username) {
+        // const result = await db.query(
+        //     `SELECT id, username, book_id
+        //     FROM users_books 
+        //     WHERE username = $1`,
+        //     [username]
+        // );
+
+        // b.book_image, b.title, b.authors, b.description, b.average_rating, b.published_date, b.publisher, b.page_count, b.isbn
+
+        const result = await db.query(
+            `SELECT ub.id, b.book_image, b.title, b.authors, b.description, b.average_rating, b.published_date, b.publisher, b.page_count, b.isbn
+            FROM users_books AS ub
+            JOIN books AS b ON ub.book_id = b.id
+            WHERE ub.username = $1`,
+            [username]
+        );
+
+        let bookShelfRes = result.rows;
+        console.log("MODELS - BOOK - getBookshelf - bookShelfRes", bookShelfRes);
+
+        return bookShelfRes;
+    }
+
+    static async deleteBook(userBooksId) {
+        const result = await db.query(
+            `DELETE FROM users_books 
+                WHERE id = $1`,
+            [userBooksId]);
+
+        let bookShelfRes = result.rows;
+        console.log("MODELS - BOOK - getBookshelf - bookShelfRes", bookShelfRes);
+
+        // return (bookShelfRes.length > 0) ? true : false;
+        return (bookShelfRes.length == 0);
+
+        // return bookShelfRes;
     }
 }
 

@@ -4,12 +4,16 @@ const app = express();
 const cors = require("cors");
 const booksRoutes = require('./routes/books');
 const usersRoutes = require('./routes/users');
+const journalsRoutes = require('./routes/journals');
+const newsfeedRoutes = require('./routes/newsfeed');
 const authRoutes = require('./routes/auth');
 
 app.use(express.json());
 app.use(cors());
 app.use('/books', booksRoutes);
 app.use('/users', usersRoutes);
+app.use('/journals', journalsRoutes);
+app.use('/newsfeed', newsfeedRoutes);
 app.use('/', authRoutes);
 
 

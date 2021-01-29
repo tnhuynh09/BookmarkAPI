@@ -3,6 +3,7 @@
 
 -- psql bookmark < data.sql
 
+DROP TABLE IF EXISTS books_journals;
 DROP TABLE IF EXISTS users_books;
 DROP TABLE IF EXISTS journals;
 DROP TABLE IF EXISTS books;
@@ -42,8 +43,6 @@ CREATE TABLE users_books(
 CREATE TYPE progress AS ENUM ('reading', 'finished', 'will read', 'abandoned');
 CREATE TABLE journals(
     id SERIAL PRIMARY KEY,
-    username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
-    book_id INTEGER NOT NULL REFERENCES books ON DELETE CASCADE,
     is_public BOOLEAN DEFAULT TRUE,
     date_started DATE,
     date_finished DATE,
@@ -55,6 +54,11 @@ CREATE TABLE journals(
 );
 
 
+CREATE TABLE books_journals(
+    id SERIAL PRIMARY KEY,
+    users_books_id INTEGER NOT NULL REFERENCES users_books ON DELETE CASCADE,
+    journal_id INTEGER NOT NULL REFERENCES journals ON DELETE CASCADE
+);
 
 
 
