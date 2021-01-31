@@ -3,6 +3,7 @@
 
 -- psql bookmark < data.sql
 
+DROP TYPE IF EXISTS journals_votes;
 DROP TABLE IF EXISTS books_journals;
 DROP TABLE IF EXISTS users_books;
 DROP TABLE IF EXISTS journals;
@@ -60,7 +61,11 @@ CREATE TABLE books_journals(
     journal_id INTEGER NOT NULL REFERENCES journals ON DELETE CASCADE
 );
 
-
+CREATE TABLE journals_votes(
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+    journal_id INTEGER NOT NULL REFERENCES journals ON DELETE CASCADE
+);
 
 -- CREATE TABLE jobs(
 --     id SERIAL PRIMARY KEY,

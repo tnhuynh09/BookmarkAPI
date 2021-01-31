@@ -93,6 +93,39 @@ class Journal {
 
         return updatedJournalRes;
     }
+
+    static async likesToggle(username, journalId) {
+        let result = await db.query(
+            `SELECT id, username, journal_id
+            FROM journals_votes 
+            WHERE username = $1 AND journal_id = $2`,
+            [username, journalId]
+        );
+
+        let journalVoteRes = result.rows;
+        let actionType = "none";
+
+        if (journalVoteRes.length > 0) {
+            let journalVoteId = journalVoteRes[0].id;
+            result = await db.query(
+                `DELETE FROM journals_votes 
+                    WHERE id = $1`,
+                [journalVoteId]);
+            actionType = "remove-likes";
+        } else {
+            result = await db.query(
+                `INSERT INTO journals_votes
+                (username, journal_id) 
+                VALUES ($1, $2)`,
+                [
+                    username,
+                    journalId
+                ]
+            );
+            actionType = "add-likes";
+        }
+        return actionType;
+    }
 }
 
 module.exports = Journal;

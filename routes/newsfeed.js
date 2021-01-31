@@ -24,7 +24,7 @@ router.get('/', authenticationRequired, async function (req, res, next) {
     console.log("TIGER --- newsfeed ", isPublic);
     try {
         // let journal = await Journal.findOrCreateOne(bookId);
-
+        // The right way is to limit it to maybe 50 at a time. Pass in two extra variables, limit and offset.
         let result = [];
         if (isPublic) {
             const res = await db.query(
@@ -52,7 +52,59 @@ router.get('/', authenticationRequired, async function (req, res, next) {
             result = res.rows;
         }
 
+        // NOTE: If thoa is not happy with this, refactor it later.
+
+        // Get everything from journal vote result. // The right way is to grab all the things based on the journal Id from result.
+        let journalVotesResult = await db.query(
+            `SELECT id, username, journal_id
+            FROM journals_votes `,
+            []
+        );
+
+        let journalVotesCountMap = {}; // Key = journal_id, value = number of likes
+        let journalUserLikesMap = {}; // Key = journal_id, value = if the particular user likes it or not. true or false
+        for (let i = 0; i < journalVotesResult.rows.length; i++) { // Loop through all the rows from journalVotesResult
+            const journalId = journalVotesResult.rows[i].journal_id;
+
+            // Getting the amount of votes.
+            if (journalVotesCountMap[journalId]) {
+                journalVotesCountMap[journalId]++;
+            } else {
+                journalVotesCountMap[journalId] = 1;
+            }
+
+            // Figuring out if the user likes this item.
+            if (req.user && journalVotesResult.rows[i].username == req.user.username) {
+                journalUserLikesMap[journalId] = true;
+            } else {
+                journalUserLikesMap[journalId] = false;
+            }
+        }
+
+        for (let i = 0; i < result.length; i++) { // Loop through the journal entries.
+            const journalId = result[i].id;
+            if (journalVotesCountMap[journalId]) {
+                result[i].likesCount = journalVotesCountMap[journalId];
+            } else {
+                result[i].likesCount = 0;
+            }
+
+            result[i].isLiked = journalUserLikesMap[journalId];
+        }
+
         return res.json({ result });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+router.post('/likesToggle', authenticationRequired, async function (req, res, next) {
+    const journalId = req.body.journalId;
+    const username = req.user.username;
+
+    try {
+        let result = await Journal.likesToggle(username, journalId);
+        return res.json({ success: true, actionType: result });
     } catch (err) {
         return next(err);
     }
