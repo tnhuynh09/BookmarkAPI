@@ -23,6 +23,7 @@ app.use(function (req, res, next) {
     const err = new ExpressError("Not Found", 404);
 
     // pass the error to the next piece of middleware
+    console.log("General Error - err", err);
     return next(err);
 });
 

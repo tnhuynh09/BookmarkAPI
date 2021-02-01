@@ -24,6 +24,7 @@ const router = express.Router();
 // Create a new user and return information on the newly created user.
 router.post('/', async function (req, res, next) {
     try {
+        console.log("Register - req.body", req.body);
         if (!req.body.image_url) {
             req.body.image_url = "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png";
         }
@@ -37,6 +38,7 @@ router.post('/', async function (req, res, next) {
 
         const user = await User.register(req.body);
         const token = createToken(user);
+        console.log("Register - user", user);
         return res.status(201).json({ token });
     } catch (err) {
         return next(err);
