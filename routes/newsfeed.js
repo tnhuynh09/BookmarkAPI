@@ -1,7 +1,7 @@
 /** Routes for newsfeed. */
 
 const express = require('express');
-const Journal = require('../models/Journal');
+const Journal = require('../models/journal');
 const { authenticationRequired } = require('../middleware/auth');
 const db = require("../db");
 

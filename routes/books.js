@@ -3,7 +3,7 @@
 const express = require('express');
 const axios = require('axios')
 const { API_KEY } = require("../config");
-const Book = require('../models/Book');
+const Book = require('../models/book');
 const { authenticationRequired } = require('../middleware/auth');
 
 const GOOGLE_BOOK_API_BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=";

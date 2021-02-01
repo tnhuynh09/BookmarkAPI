@@ -2,7 +2,7 @@
 
 const express = require("express");
 const router = new express.Router();
-const User = require("../models/User");
+const User = require("../models/user");
 const createToken = require('../helpers/createToken');
 
 // Authenticate a user and return a JSON Web Token 

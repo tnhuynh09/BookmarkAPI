@@ -1,7 +1,7 @@
 /** Routes for journals. */
 
 const express = require('express');
-const Journal = require('../models/Journal');
+const Journal = require('../models/journal');
 
 const router = express.Router();
 
