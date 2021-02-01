@@ -32,6 +32,7 @@ router.post('/', async function (req, res, next) {
         if (!result.valid) {
             const listOfErrors = result.errors.map(error => error.stack);
             const err = new ExpressError(listOfErrors, 400);
+            console.log("Register - 1 err ", err);
 
             return next(err);
         }
@@ -41,6 +42,7 @@ router.post('/', async function (req, res, next) {
         console.log("Register - user", user);
         return res.status(201).json({ token });
     } catch (err) {
+        console.log("Register - 2 err ", err);
         return next(err);
     }
 });
