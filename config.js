@@ -21,7 +21,7 @@ console.log("process.env.NODE_ENV =", process.env.NODE_ENV);
 if (process.env.NODE_ENV === "test") {
     DB_URI = "bookmark-test";
 } else {
-    DB_URI = process.env.DATABASE_URL + "?ssl=true" || "bookmark";
+    DB_URI = process.env.DATABASE_URL || "bookmark";
 }
 
 console.log("Using database - DB_URI =", DB_URI);
