@@ -1,4 +1,4 @@
-\c bookmark
+-- \c bookmark
 -- \c bookmark-test
 
 -- psql bookmark < data.sql
