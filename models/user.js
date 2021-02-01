@@ -12,7 +12,9 @@ class User {
      */
 
     static async register(data) {
+        console.log("User Model - register - data", data);
         const hashedPassword = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+        console.log("User Model - register - hashedPassword", hashedPassword);
         const result = await db.query(
             `INSERT INTO users (
 				username,
