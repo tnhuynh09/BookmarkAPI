@@ -77,17 +77,6 @@ class User {
             throw new ExpressError(`No such user: ${username}`, 404);
         }
 
-        // const applicationsRes = await db.query(
-        //     `SELECT j.title, 
-        //             j.company_handle, 
-        //             a.state 
-        //      FROM applications AS a
-        //      JOIN jobs AS j ON j.id = a.job_id
-        //      WHERE a.username = $1`,
-        //     [username]
-        // );
-
-        // user.jobs = applicationsRes.rows;
         return user;
     }
 
@@ -152,7 +141,6 @@ class User {
             [data.username]
         );
 
-        console.log("AUTH - user authenticate result", result.rows);
         const user = result.rows[0];
         if (user) {
             // compare hashed password to a new hash from password
@@ -161,9 +149,8 @@ class User {
                 return user;
             }
         }
-        // if (result.rows.length === 0) {
-        throw new ExpressError("Invalid password. Please try again.", 401);
-        // }
+
+        throw new ExpressError("Invalid Credentials", 401);
     }
 }
 

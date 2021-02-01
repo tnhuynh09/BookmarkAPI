@@ -7,20 +7,14 @@ const { SECRET } = require("../config");
 
 // Ensure that the user is logged in and authenticated.
 function authenticationRequired(req, res, next) {
-    console.log("TIGER --- authenticationRequired - start", req.headers.authorization);
     try {
         const { authorization } = req.headers;
         const accessToken = authorization.split(" ")[1];
-        console.log("TIGER --- tokenFromBody", accessToken);
         const payload = jwt.verify(accessToken, SECRET);
-        console.log("TIGER --- payload", payload);
         req.user = payload;
 
         return next();
     } catch (err) {
-        // console.log("TIGER --- tokenFromBody --- err", req.body._token);
-        // console.log("TIGER --- payload --- err", jwt.verify(tokenFromBody, SECRET));
-        console.log("TIGER --- authenticationRequired err", err);
         return next(new ExpressError("Authentication required", 401));
     }
 }

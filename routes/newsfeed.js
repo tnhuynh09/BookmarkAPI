@@ -1,30 +1,16 @@
-/** Routes for books. */
+/** Routes for newsfeed. */
 
 const express = require('express');
-// const ExpressError = require('../helpers/ExpressError');
-// const jsonschema = require('jsonschema');
-const axios = require('axios')
-const { API_KEY } = require("../config");
-const GOOGLE_BOOK_API_BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=";
 const Journal = require('../models/Journal');
-// const newUserSchema = require("../schemas/newUserSchema.json")
-// const updateUserSchema = require("../schemas/updateUserSchema.json")
-// const createToken = require('../helpers/createToken');
-const { authenticationRequired, correctUserRequired } = require('../middleware/auth');
+const { authenticationRequired } = require('../middleware/auth');
 const db = require("../db");
 
 const router = express.Router();
 
-// Retrieve book information from external API (Google Books API) from search query
-// GET REQUEST EXAMPLE: 
-// https://www.googleapis.com/books/v1/volumes?q=twilight
-
 router.get('/', authenticationRequired, async function (req, res, next) {
     const isPublic = req.query.isPublic;
-    console.log("TIGER --- newsfeed ", isPublic);
+
     try {
-        // let journal = await Journal.findOrCreateOne(bookId);
-        // The right way is to limit it to maybe 50 at a time. Pass in two extra variables, limit and offset.
         let result = [];
         if (isPublic) {
             const res = await db.query(
@@ -52,9 +38,7 @@ router.get('/', authenticationRequired, async function (req, res, next) {
             result = res.rows;
         }
 
-        // NOTE: If thoa is not happy with this, refactor it later.
-
-        // Get everything from journal vote result. // The right way is to grab all the things based on the journal Id from result.
+        // Get everything from journal vote result. 
         let journalVotesResult = await db.query(
             `SELECT id, username, journal_id
             FROM journals_votes `,

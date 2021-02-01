@@ -1,8 +1,8 @@
 const db = require("../db");
-const bcrypt = require("bcrypt");
-const sqlForPartialUpdate = require("../helpers/partialUpdate");
-const ExpressError = require("../helpers/ExpressError");
-const { BCRYPT_WORK_FACTOR } = require("../config");
+// const bcrypt = require("bcrypt");
+// const sqlForPartialUpdate = require("../helpers/partialUpdate");
+// const ExpressError = require("../helpers/ExpressError");
+// const { BCRYPT_WORK_FACTOR } = require("../config");
 
 
 class Journal {
@@ -16,21 +16,11 @@ class Journal {
             [bookId]
         );
 
-        console.log("JOURNAL - RESULT", result.rows);
-
-        // const result = await db.query(
-        //     `SELECT id, users_books_id, journal_id
-        //     FROM books_journals 
-        //     WHERE users_books_id = $1`,
-        //     [bookId]
-        // );
-
         // If there is nothing, create a new journal with empty data based on the bookId
         let journalRes = null;
         if (result.rows.length > 0) {
             journalRes = result.rows[0];
         }
-        console.log("JOURNAL - RESULT - journalRes", journalRes);
 
         if (journalRes == null) {
             console.log("JOURNAL - RESULT - journalRes ==== null");
@@ -41,7 +31,6 @@ class Journal {
                           RETURNING *`,
                 [true, null, null, null, null, null, null, null]
             );
-            console.log("JOURNAL - RESULT - res INSERT", res);
 
             journalRes = res.rows[0];
 
@@ -60,8 +49,6 @@ class Journal {
 
     static async editOne(data) {
         // Edit the journal based on the bookId
-        console.log("TIGER --- journal editOne - start - data", data);
-
         const result = await db.query(
             `UPDATE journals 
                 SET is_public = $1,
@@ -86,9 +73,7 @@ class Journal {
                 data.id,
             ]
         );
-        // AS ENUM ('reading', 'finished', 'will read', 'abandoned');
 
-        console.log("TIGER --- journal editOne - result", result);
         let updatedJournalRes = result.rows[0];
 
         return updatedJournalRes;
@@ -107,10 +92,12 @@ class Journal {
 
         if (journalVoteRes.length > 0) {
             let journalVoteId = journalVoteRes[0].id;
+
             result = await db.query(
                 `DELETE FROM journals_votes 
                     WHERE id = $1`,
                 [journalVoteId]);
+
             actionType = "remove-likes";
         } else {
             result = await db.query(
@@ -122,8 +109,10 @@ class Journal {
                     journalId
                 ]
             );
+
             actionType = "add-likes";
         }
+
         return actionType;
     }
 }

@@ -49,7 +49,6 @@ router.get('/', authenticationRequired, async function (req, res, next) {
         const user = await User.findOne(req.user.username);
         return res.json({ user: user });
     } catch (err) {
-        console.log("API - GET USER --- err", err);
         return next(err);
     }
 });

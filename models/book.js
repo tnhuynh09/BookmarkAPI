@@ -1,8 +1,8 @@
 const db = require("../db");
-const bcrypt = require("bcrypt");
-const sqlForPartialUpdate = require("../helpers/partialUpdate");
-const ExpressError = require("../helpers/ExpressError");
-const { BCRYPT_WORK_FACTOR } = require("../config");
+// const bcrypt = require("bcrypt");
+// const sqlForPartialUpdate = require("../helpers/partialUpdate");
+// const ExpressError = require("../helpers/ExpressError");
+// const { BCRYPT_WORK_FACTOR } = require("../config");
 
 
 class Book {
@@ -15,8 +15,6 @@ class Book {
         );
 
         const bookRes = result.rows[0];
-
-        console.log("MODELS - BOOK - findOne - bookRes", bookRes);
 
         return bookRes;
     }
@@ -57,21 +55,11 @@ class Book {
             ]);
 
         let bookRes = result.rows[0];
-        console.log("MODELS - BOOK - ADD ONE - bookRes", bookRes);
 
         return bookRes;
     }
 
     static async getBookshelf(username) {
-        // const result = await db.query(
-        //     `SELECT id, username, book_id
-        //     FROM users_books 
-        //     WHERE username = $1`,
-        //     [username]
-        // );
-
-        // b.book_image, b.title, b.authors, b.description, b.average_rating, b.published_date, b.publisher, b.page_count, b.isbn
-
         const result = await db.query(
             `SELECT ub.id, b.book_image, b.title, b.authors, b.description, b.average_rating, b.published_date, b.publisher, b.page_count, b.isbn
             FROM users_books AS ub
@@ -81,7 +69,6 @@ class Book {
         );
 
         let bookShelfRes = result.rows;
-        console.log("MODELS - BOOK - getBookshelf - bookShelfRes", bookShelfRes);
 
         return bookShelfRes;
     }
@@ -93,12 +80,8 @@ class Book {
             [userBooksId]);
 
         let bookShelfRes = result.rows;
-        console.log("MODELS - BOOK - getBookshelf - bookShelfRes", bookShelfRes);
 
-        // return (bookShelfRes.length > 0) ? true : false;
         return (bookShelfRes.length == 0);
-
-        // return bookShelfRes;
     }
 }
 
