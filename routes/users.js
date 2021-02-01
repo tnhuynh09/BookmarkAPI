@@ -31,7 +31,7 @@ router.post('/', async function (req, res, next) {
         console.log("Register - 1 ");
         const result = jsonschema.validate(req.body, newUserSchema);
         console.log("Register - result ", result);
-        if (!result.valid) {
+        if (result.errors.length > 0) {
             const listOfErrors = result.errors.map(error => error.stack);
             console.log("Register - listOfErrors ", listOfErrors);
             const err = new ExpressError(listOfErrors, 400);
