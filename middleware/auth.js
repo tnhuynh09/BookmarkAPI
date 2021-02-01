@@ -1,6 +1,6 @@
 /** Middleware for handling req authorization for routes. */
 
-const ExpressError = require("../helpers/ExpressError");
+const ExpressError = require("../helpers/expressError");
 const jwt = require("jsonwebtoken");
 const { SECRET } = require("../config");
 

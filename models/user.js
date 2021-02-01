@@ -1,7 +1,7 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
-const ExpressError = require("../helpers/ExpressError");
+const ExpressError = require("../helpers/expressError");
 const { BCRYPT_WORK_FACTOR } = require("../config");
 
 class User {

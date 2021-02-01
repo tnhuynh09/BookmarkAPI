@@ -1,7 +1,7 @@
 /** Routes for users. */
 
 const express = require('express');
-const ExpressError = require('../helpers/ExpressError');
+const ExpressError = require('../helpers/expressError');
 const jsonschema = require('jsonschema');
 const User = require('../models/user');
 const newUserSchema = require("../schemas/newUserSchema.json")
