@@ -28,9 +28,12 @@ router.post('/', async function (req, res, next) {
         if (!req.body.image_url) {
             req.body.image_url = "https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png";
         }
+        console.log("Register - 1 ");
         const result = jsonschema.validate(req.body, newUserSchema);
+        console.log("Register - result ", result);
         if (!result.valid) {
             const listOfErrors = result.errors.map(error => error.stack);
+            console.log("Register - listOfErrors ", listOfErrors);
             const err = new ExpressError(listOfErrors, 400);
             console.log("Register - 1 err ", err);
 
@@ -38,8 +41,9 @@ router.post('/', async function (req, res, next) {
         }
 
         const user = await User.register(req.body);
+        console.log("Register - user ", user);
         const token = createToken(user);
-        console.log("Register - user", user);
+        console.log("Register - token", token);
         return res.status(201).json({ token });
     } catch (err) {
         console.log("Register - 2 err ", err);
