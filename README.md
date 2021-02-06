@@ -7,6 +7,14 @@ A web application for bookworms to help keep track of the book they read, finish
 This external API provides the books data needed for the BOOKmark my words project. 
 Google Book API - https://developers.google.com/books
 
+## Installation
+
+Get started with the following to install dependencies:
+
+```bash
+$ npm install
+```
+
 ## API Documentation
 
 ## Database Schema 
